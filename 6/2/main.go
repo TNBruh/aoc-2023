@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"regexp"
 	"strconv"
@@ -22,12 +23,20 @@ func main() {
 		inp2 = append(inp2, str_2_int_arr(e, " "))
 	}
 
-	sum := 1
-	for i := range inp2[0] {
-		sum *= proc2(inp2[0][i], inp2[1][i])
+	fmt.Println(inp2)
+	d1, d2 := proc3(0, inp2[0][0], inp2[1][0])
+	for d2-d1 > 1 {
+		d1, d2 = proc3(d1, inp2[0][0], inp2[1][0])
 	}
+	d3 := inp2[0][0] - d2
+	d4 := d3 - d2 + 1
+	fmt.Println(d4)
+	// sum := 1
+	// for i := range inp2[0] {
+	// 	sum *= proc2(inp2[0][i], inp2[1][i])
+	// }
 
-	fmt.Println(sum)
+	// fmt.Println(sum)
 }
 
 func read_input(filename string) []string {
@@ -42,7 +51,7 @@ func read_input(filename string) []string {
 func proc1(inp []string) []string {
 	for i, e := range inp {
 		inp[i] = rg.ReplaceAllString(e, "")
-		inp[i] = rg1.ReplaceAllString(inp[i], " ")
+		inp[i] = rg1.ReplaceAllString(inp[i], "")
 	}
 
 	return inp
@@ -84,4 +93,15 @@ func proc2(inp int, inp1 int) int {
 
 	fmt.Println(ceil, floor)
 	return ceil - floor + 1
+}
+
+func proc3(floor int, ceil int, target int) (int, int) {
+	for i := 0; (floor + int(math.Pow(2, float64(i)))) <= ceil; i++ {
+		d := (floor + int(math.Pow(2, float64(i))))
+		if (ceil-d)*d >= target {
+			return (floor + int(math.Pow(2, float64(i-1)))), d
+		}
+	}
+	os.Exit(1)
+	return -1, -1
 }
