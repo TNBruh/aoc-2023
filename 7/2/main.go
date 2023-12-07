@@ -31,7 +31,7 @@ var cards map[string]int = map[string]int{
 }
 
 func main() {
-	inp, inp1 := read_input("input.txt")
+	inp, inp1 := read_input("test.txt")
 
 	inp2 := []map[string]int{}
 
@@ -143,6 +143,20 @@ func proc1(inp string) map[string]int {
 }
 
 func proc2(inp map[string]int) int { //find type
+	_, ok := inp["J"]
+	if ok {
+		inp["X"] = -1
+		max_key := "X"
+		for k, _ := range inp {
+			if k != "J" && (inp[k] > inp[max_key]) {
+				max_key = k
+			}
+		}
+		delete(inp, "X")
+
+		inp[max_key] += inp["J"]
+		delete(inp, "J")
+	}
 	if len(inp) == 1 {
 		return 6
 	} else if len(inp) == 2 { // 4-of-a-kind, full house,
